@@ -14,8 +14,24 @@ cargo watch -x run
 
 ## curl
 
+### POST
+
 ```
 curl -X POST -H 'Content-Type: application/json' -d '{"title" : "タイトル" , "body" : "ボディ"}' localhost:8686/api/v1/sample
+```
+
+### CORS
+
+Success
+
+```
+curl -H "Origin: http://localhost:3000"  localhost:8686/api/v1/sample
+```
+
+Failure
+
+```
+curl -H "Origin: http://localhost:3001"  localhost:8686/api/v1/sample
 ```
 
 ## SetUp
@@ -90,6 +106,7 @@ insert into sample(title,body,created_at,updated_at) values("title4","body4",165
 ## Install Memo
 ```
 cargo add actix-web
+cargo add actix-cors
 cargo add serde --features="derive"
 cargo add sqlx --features="macros" --features="runtime-actix-rustls" --features="mysql" --features="sqlite"
 cargo add thiserror
