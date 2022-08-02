@@ -1,15 +1,9 @@
 use actix_web::{web, HttpResponse};
 use rust_actix_web_sqlx::databases::mysql;
-use serde::{Deserialize, Serialize};
+use rust_actix_web_sqlx::errors;
+use rust_actix_web_sqlx::structs::{SamplePost, SampleRow};
 
-#[derive(Debug, sqlx::FromRow, Deserialize, Serialize)]
-struct SampleRow {
-    id: i64,
-    title: String,
-    body: String,
-}
-
-pub async fn get() -> Result<HttpResponse, actix_web::Error> {
+pub async fn get() -> Result<HttpResponse, errors::Error> {
     let pool = match mysql::create_mysql_connection_pool().await {
         Ok(pool) => pool,
         Err(_) => panic!("error"),
@@ -27,11 +21,21 @@ pub async fn get() -> Result<HttpResponse, actix_web::Error> {
     Ok(HttpResponse::Ok().json(mysql_sample_rows))
 }
 
-#[derive(Debug, Deserialize, Serialize)]
-pub struct SamplePost {
-    title: String,
-    body: String,
-}
-pub async fn post(args: web::Json<SamplePost>) -> Result<HttpResponse, actix_web::Error> {
+pub async fn post(args: web::Json<SamplePost>) -> Result<HttpResponse, errors::Error> {
+    let pool = match mysql::create_mysql_connection_pool().await {
+        Ok(pool) => pool,
+        Err(_) => panic!("error"),
+    };
+    let mysql_response = match sqlx::query("insert into sample(title,body) values(?,?)")
+        .bind(&args.title)
+        .bind(&args.body)
+        .execute(&pool)
+        .await
+    {
+        Ok(v) => v,
+        Err(_) => panic!("error"),
+    };
+    // MEMO: MySqlQueryResult { rows_affected: 1, last_insert_id: 6 }
+    println!("{:?}", mysql_response);
     Ok(HttpResponse::Ok().json(&args.title))
 }
