@@ -23,4 +23,6 @@ curl -X POST -H 'Content-Type: application/json' -d '{"title" : "タイトル" ,
 cargo add actix-web
 cargo add serde --features="derive"
 cargo add sqlx --features="macros" --features="runtime-actix-rustls" --features="mysql" --features="sqlite"
+cargo add thiserror
+cargo add tracing
 ```

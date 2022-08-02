@@ -1,7 +1,7 @@
+use crate::errors;
 use sqlx::mysql::{MySqlConnectOptions, MySqlPoolOptions};
-use sqlx::Error;
 
-pub async fn create_mysql_connection_pool() -> Result<sqlx::Pool<sqlx::MySql>, Error> {
+pub async fn create_mysql_connection_pool() -> Result<sqlx::Pool<sqlx::MySql>, errors::Error> {
     let mysql_config = MySqlConnectOptions::new()
         .host("127.0.0.1")
         .username("root")
@@ -15,7 +15,7 @@ pub async fn create_mysql_connection_pool() -> Result<sqlx::Pool<sqlx::MySql>, E
         .await
     {
         Ok(pool) => pool,
-        Err(_) => panic!("error"),
+        Err(e) => return Err(errors::Error::Sqlx(e)),
     };
 
     Ok(connection_pool)
