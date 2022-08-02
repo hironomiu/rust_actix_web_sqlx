@@ -38,6 +38,7 @@ pub async fn get() -> Result<HttpResponse, errors::Error> {
 }
 
 pub async fn post(args: web::Json<SamplePost>) -> Result<HttpResponse, errors::Error> {
+    // MEMO: ---------- MySQL ----------
     let pool = match mysql::create_mysql_connection_pool().await {
         Ok(pool) => pool,
         Err(_) => panic!("error"),
@@ -53,5 +54,18 @@ pub async fn post(args: web::Json<SamplePost>) -> Result<HttpResponse, errors::E
     };
     // MEMO: MySqlQueryResult { rows_affected: 1, last_insert_id: 6 }
     println!("{:?}", mysql_response);
+
+    // MEMO: ---------- sqlite ----------
+    let mut sqlite_conn = sqlite::connect_sqlite_db().await?;
+    let sqlite_response =
+        sqlx::query("insert into sample(title,body,created_at,updated_at) values(?,?,?,?)")
+            .bind(&args.title)
+            .bind(&args.body)
+            .bind(1)
+            .bind(1)
+            .execute(&mut sqlite_conn)
+            .await?;
+    // MEMO: SqliteQueryResult { changes: 1, last_insert_rowid: 5 }
+    println!("{:?}", sqlite_response);
     Ok(HttpResponse::Ok().json(&args.title))
 }
