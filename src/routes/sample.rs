@@ -4,6 +4,7 @@ use rust_actix_web_sqlx::errors;
 use rust_actix_web_sqlx::structs::{SamplePost, SampleRow};
 
 pub async fn get() -> Result<HttpResponse, errors::Error> {
+    // MEMO: ---------- MySQL ----------
     let pool = match mysql::create_mysql_connection_pool().await {
         Ok(pool) => pool,
         Err(_) => panic!("error"),
@@ -16,7 +17,22 @@ pub async fn get() -> Result<HttpResponse, errors::Error> {
         Ok(rows) => rows,
         Err(_) => panic!("error"),
     };
-    println!("{:?}", mysql_sample_rows);
+    println!("MySQL: {:?}", mysql_sample_rows);
+
+    // MEMO: ---------- sqlite ----------
+    let mut sqlite_conn = match sqlite::connect_sqlite_db().await {
+        Ok(conn) => conn,
+        Err(_) => panic!("error"),
+    };
+
+    let rows: Vec<SampleRow> = match sqlx::query_as("select id,title,body from sample")
+        .fetch_all(&mut sqlite_conn)
+        .await
+    {
+        Ok(rows) => rows,
+        Err(_) => panic!("error"),
+    };
+    println!("sqlite: {:?}", rows);
 
     Ok(HttpResponse::Ok().json(mysql_sample_rows))
 }
