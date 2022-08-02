@@ -1,5 +1,5 @@
 use actix_web::{web, HttpResponse};
-use rust_actix_web_sqlx::databases::mysql;
+use rust_actix_web_sqlx::databases::{mysql, sqlite};
 use rust_actix_web_sqlx::errors;
 use rust_actix_web_sqlx::structs::{SamplePost, SampleRow};
 

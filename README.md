@@ -22,6 +22,8 @@ curl -X POST -H 'Content-Type: application/json' -d '{"title" : "タイトル" ,
 
 ### Create MySQL DB & Table
 
+#### cereate DB
+
 ```
 create database sample;
 use sample
@@ -54,6 +56,36 @@ insert into sample(title,body) values("title3","body3");
 insert into sample(title,body) values("title4","body4");
 ```
 
+### Create sqlite DB & Table
+
+#### cereate DB
+
+```
+mkdir sqlite_db
+cd sqlite_db
+
+sqlite3 sample.db
+```
+
+#### create Table
+
+```
+create table sample(
+ id integer not null primary key autoincrement,
+ title varchar not null,
+ body text not null,
+ created_at bigint not null,
+ updated_at bigint not null);
+```
+
+#### insert Data
+
+```
+insert into sample(title,body,created_at,updated_at) values("title1","body1",1659407602051,1659407602051);
+insert into sample(title,body,created_at,updated_at) values("title2","body2",1659407602051,1659407602051);
+insert into sample(title,body,created_at,updated_at) values("title3","body3",1659407602051,1659407602051);
+insert into sample(title,body,created_at,updated_at) values("title4","body4",1659407602051,1659407602051);
+```
 
 ## Install Memo
 ```
