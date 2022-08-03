@@ -1,5 +1,7 @@
 use actix_cors::Cors;
 use actix_web::{get, http, web, App, HttpResponse, HttpServer};
+use dotenv::dotenv;
+use std::env;
 mod routes;
 
 #[get("/")]
@@ -10,10 +12,9 @@ async fn index() -> Result<HttpResponse, actix_web::Error> {
 
 #[actix_web::main]
 async fn main() -> Result<(), actix_web::Error> {
-    // TODO: .envに切り出す
-    let server_address = "0.0.0.0:8686";
-    // TODO: .envに切り出す
-    let cors_allowed_origin = "http://localhost:3000";
+    dotenv().ok();
+    let server_address = env::var("SERVER_ADDRESS").expect("SERVER_ADDRESS error");
+    let cors_allowed_origin = env::var("CORS_ALLOWED_ORIGIN").expect("CORS_ALLOWED_ORIGIN error");
     HttpServer::new(move || {
         let cors = Cors::default()
             .allowed_origin(&cors_allowed_origin)

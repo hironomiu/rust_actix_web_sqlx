@@ -8,6 +8,7 @@ edition = "2021"
 [dependencies]
 actix-cors = "0.6.1"
 actix-web = "4.1.0"
+dotenv = "0.15.0"
 serde = { version = "1.0.141", features = ["derive"] }
 sqlx = { version = "0.6.0", features = ["macros", "runtime-actix-rustls", "mysql", "sqlite"] }
 thiserror = "1.0.31"
