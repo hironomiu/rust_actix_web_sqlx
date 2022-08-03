@@ -92,6 +92,7 @@ sqlite3 sample.db
 ```
 cargo add actix-web
 cargo add actix-cors
+cargo add actix-identity
 cargo add serde --features="derive"
 cargo add sqlx --features="macros" --features="runtime-actix-rustls" --features="mysql" --features="sqlite"
 cargo add thiserror
