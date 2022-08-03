@@ -36,6 +36,19 @@ curl -H "Origin: http://localhost:3001"  localhost:8686/api/v1/sample
 
 ## SetUp
 
+### .env
+
+|変数|設定値|
+|:-|:-|
+|SERVER_ADDRESS|localhost:5555|
+|CORS_ALLOWED_ORIGIN|http://localhost:3000|
+|MYSQL_DATABASE_HOST|MySQLの接続ホスト|
+|MYSQL_DATABASE_PORT|MySQLの接続ポート|
+|MYSQL_DATABASE_USER|MySQLの接続ユーザ|
+|MYSQL_DATABASE_PASS|MySQLの接続パスワード|
+|MYSQL_DATABASE_NAME|MySQLの接続DB|
+|MYSQL_DATABASE_POOL_SIZE|MySQLの接続プールサイズ|
+
 ### Create MySQL DB & Table
 
 #### cereate DB
