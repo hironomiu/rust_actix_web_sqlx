@@ -5,7 +5,11 @@ use std::env;
 
 pub async fn create_mysql_connection_pool() -> Result<sqlx::Pool<sqlx::MySql>, errors::Error> {
     dotenv().ok();
-    let host = env::var("MYSQL_DATABASE_HOST").expect("MYSQL_DATABASE_HOST error");
+    let host = match env::var("MYSQL_DATABASE_HOST") {
+        Ok(host) => host,
+        Err(e) => return Err(errors::Error::Var(e)),
+    };
+
     let port = env::var("MYSQL_DATABASE_PORT")
         .expect("MYSQL_DATABASE_PORT error")
         .parse::<u16>()
