@@ -45,10 +45,15 @@ async fn main() -> Result<(), actix_web::Error> {
                                 .route("", web::post().to(routes::sample::post)),
                         )
                         .service(
-                            web::scope("/auth").service(
-                                web::scope("signin")
-                                    .route("", web::post().to(routes::auth::signin_post)),
-                            ),
+                            web::scope("/auth")
+                                .service(
+                                    web::scope("/signin")
+                                        .route("", web::post().to(routes::auth::signin_post)),
+                                )
+                                .service(
+                                    web::scope("/signout")
+                                        .route("", web::post().to(routes::auth::signout_post)),
+                                ),
                         ),
                 ),
             )

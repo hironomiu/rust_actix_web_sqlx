@@ -34,3 +34,9 @@ pub async fn signin_post(
 
     Ok(HttpResponse::Ok().json("hoge"))
 }
+
+pub async fn signout_post(user: Identity) -> Result<HttpResponse, Error> {
+    println!("called");
+    user.logout();
+    Ok(HttpResponse::Ok().json("ok"))
+}

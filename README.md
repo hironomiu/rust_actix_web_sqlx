@@ -37,8 +37,13 @@ curl -H "Origin: http://localhost:3001"  localhost:8686/api/v1/sample
 #### Auth
 
 ```
-curl -X POST -H 'Content-Type: application/json' -d '{"email" : "taro@example.com" , "password" : "password"}' localhost:8686/api/v1/auth
+curl -X POST -H 'Content-Type: application/json' -d '{"email" : "taro@example.com" , "password" : "password"}' localhost:8686/api/v1/auth/signin
 ```
+
+```
+curl -X POST -H 'Content-Type: application/json' localhost:8686/api/v1/auth/signout
+```
+
 ## SetUp
 
 ### .env
