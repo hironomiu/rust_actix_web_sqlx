@@ -11,6 +11,7 @@ actix-identity = "0.5.2"
 actix-session = { version = "0.7.1", features=["cookie-session"] }
 actix-web = "4.1.0"
 dotenv = "0.15.0"
+pwhash = "1.0.0"
 serde = { version = "1.0.141", features = ["derive"] }
 sqlx = { version = "0.6.0", features = ["macros", "runtime-actix-rustls", "mysql", "sqlite"] }
 thiserror = "1.0.31"

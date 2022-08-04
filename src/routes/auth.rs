@@ -1,5 +1,6 @@
 use actix_identity::Identity;
 use actix_web::{web, HttpMessage, HttpRequest, HttpResponse};
+use pwhash::bcrypt;
 use rust_actix_web_sqlx::databases::mysql;
 use rust_actix_web_sqlx::errors::Error;
 use serde::{Deserialize, Serialize};
@@ -26,13 +27,21 @@ pub async fn signin_post(
             .await
         {
             Ok(row) => row,
+            // TODO: HttpResponseでnot foundを返す
             Err(_) => panic!("auth error"),
         };
     println!("{:?}", mysql_auth_row);
 
-    Identity::login(&request.extensions(), "User1".into()).unwrap();
+    let is_signin_success = bcrypt::verify(&args.password, &mysql_auth_row.password);
 
-    Ok(HttpResponse::Ok().json("hoge"))
+    println!("signin is {}", is_signin_success);
+
+    if is_signin_success {
+        Identity::login(&request.extensions(), "User1".into()).unwrap();
+        Ok(HttpResponse::Ok().json("signin success"))
+    } else {
+        Ok(HttpResponse::Ok().json("signin failed"))
+    }
 }
 
 pub async fn signout_post(user: Identity) -> Result<HttpResponse, Error> {
