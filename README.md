@@ -34,6 +34,11 @@ Failure
 curl -H "Origin: http://localhost:3001"  localhost:8686/api/v1/sample
 ```
 
+#### Auth
+
+```
+curl -X POST -H 'Content-Type: application/json' -d '{"email" : "taro@example.com" , "password" : "password"}' localhost:8686/api/v1/auth
+```
 ## SetUp
 
 ### .env
@@ -93,6 +98,7 @@ sqlite3 sample.db
 cargo add actix-web
 cargo add actix-cors
 cargo add actix-identity
+cargo add actix-session
 cargo add serde --features="derive"
 cargo add sqlx --features="macros" --features="runtime-actix-rustls" --features="mysql" --features="sqlite"
 cargo add thiserror
