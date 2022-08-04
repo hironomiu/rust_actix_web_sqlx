@@ -1,7 +1,6 @@
 use actix_cors::Cors;
 use actix_identity::IdentityMiddleware;
-use actix_session::storage::SessionStore;
-use actix_session::SessionMiddleware;
+// use actix_session::{storage::CookieSessionStore, Session, SessionMiddleware};
 use actix_web::cookie::Key;
 use actix_web::{get, http, web, App, HttpResponse, HttpServer};
 use dotenv::dotenv;
@@ -31,6 +30,10 @@ async fn main() -> Result<(), actix_web::Error> {
             .max_age(3600);
         App::new()
             .wrap(IdentityMiddleware::default())
+            // .wrap(SessionMiddleware::new(
+            //     SessionStore::,
+            //     secret_key.clone(),
+            // ))
             .wrap(cors)
             .service(index)
             .service(
