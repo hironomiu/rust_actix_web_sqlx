@@ -25,6 +25,15 @@ pub struct Message {
     is_success: bool,
     message: String,
 }
+
+pub async fn signin_get(user: Option<Identity>) -> Result<HttpResponse, Error> {
+    let message: Message = Message {
+        is_success: false,
+        message: String::from("ng"),
+    };
+    Ok(HttpResponse::Ok().json(message))
+}
+
 pub async fn signin_post(
     request: HttpRequest,
     args: web::Json<Auth>,

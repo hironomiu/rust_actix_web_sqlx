@@ -49,7 +49,8 @@ async fn main() -> Result<(), actix_web::Error> {
                             web::scope("/auth")
                                 .service(
                                     web::scope("/signin")
-                                        .route("", web::post().to(routes::auth::signin_post)),
+                                        .route("", web::post().to(routes::auth::signin_post))
+                                        .route("", web::get().to(routes::auth::signin_get)),
                                 )
                                 .service(
                                     web::scope("/signout")
