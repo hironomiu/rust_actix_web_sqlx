@@ -18,6 +18,12 @@ pub struct MysqlRowAuth {
     password: String,
 }
 
+#[derive(Debug, Serialize, Deserialize)]
+pub struct Message {
+    // TODO: is -> isSuccess (キャメル、スネークの対応)
+    is: bool,
+    message: String,
+}
 pub async fn signin_post(
     request: HttpRequest,
     args: web::Json<Auth>,
@@ -43,12 +49,17 @@ pub async fn signin_post(
 
     println!("signin is {}", is_signin_success);
 
+    let mut message: Message = Message {
+        is: false,
+        message: String::from("ng"),
+    };
     if is_signin_success {
-        // Identity::login(&request.extensions(), mysql_auth_row.id.to_string().into()).unwrap();
         Identity::login(&request.extensions(), mysql_auth_row.id.to_string().into()).unwrap();
-        Ok(HttpResponse::Ok().json("ok"))
+        message.is = true;
+        message.message = String::from("ok");
+        Ok(HttpResponse::Ok().json(message))
     } else {
-        Ok(HttpResponse::Ok().json("ng"))
+        Ok(HttpResponse::Ok().json(message))
     }
 }
 
