@@ -27,10 +27,16 @@ pub struct Message {
 }
 
 pub async fn signin_get(user: Option<Identity>) -> Result<HttpResponse, Error> {
-    let message: Message = Message {
+    let mut message: Message = Message {
         is_success: false,
         message: String::from("ng"),
     };
+
+    if let Some(_) = user {
+        message.is_success = true;
+        message.message = String::from("ok");
+        return Ok(HttpResponse::Ok().json(message));
+    }
     Ok(HttpResponse::Ok().json(message))
 }
 
