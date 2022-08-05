@@ -11,6 +11,13 @@ pub struct Auth {
     password: String,
 }
 
+#[derive(Debug, Serialize, Deserialize, sqlx::FromRow)]
+pub struct MysqlRowAuth {
+    id: u32,
+    email: String,
+    password: String,
+}
+
 pub async fn signin_post(
     request: HttpRequest,
     args: web::Json<Auth>,
@@ -20,8 +27,8 @@ pub async fn signin_post(
         Err(_) => panic!("error"),
     };
 
-    let mysql_auth_row: Auth =
-        match sqlx::query_as("select email,password from users where email = ?")
+    let mysql_auth_row: MysqlRowAuth =
+        match sqlx::query_as("select id,email,password from users where email = ?")
             .bind(&args.email)
             .fetch_one(&pool)
             .await
@@ -37,10 +44,11 @@ pub async fn signin_post(
     println!("signin is {}", is_signin_success);
 
     if is_signin_success {
-        Identity::login(&request.extensions(), "User1".into()).unwrap();
-        Ok(HttpResponse::Ok().json("signin success"))
+        // Identity::login(&request.extensions(), mysql_auth_row.id.to_string().into()).unwrap();
+        Identity::login(&request.extensions(), mysql_auth_row.id.to_string().into()).unwrap();
+        Ok(HttpResponse::Ok().json("ok"))
     } else {
-        Ok(HttpResponse::Ok().json("signin failed"))
+        Ok(HttpResponse::Ok().json("ng"))
     }
 }
 
