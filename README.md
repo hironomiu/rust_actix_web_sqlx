@@ -99,6 +99,7 @@ sqlite3 sample.db
 [sql/sqlite/insert_data](./sql/sqlite/insert_data.sql)
 
 ## Install Memo
+
 ```
 cargo add actix-web
 cargo add actix-cors
