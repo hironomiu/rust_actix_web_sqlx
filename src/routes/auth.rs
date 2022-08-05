@@ -21,7 +21,8 @@ pub struct MysqlRowAuth {
 #[derive(Debug, Serialize, Deserialize)]
 pub struct Message {
     // TODO: is -> isSuccess (キャメル、スネークの対応)
-    is: bool,
+    #[serde(rename(serialize = "isSuccess", deserialize = "is_success"))]
+    is_success: bool,
     message: String,
 }
 pub async fn signin_post(
@@ -50,12 +51,12 @@ pub async fn signin_post(
     println!("signin is {}", is_signin_success);
 
     let mut message: Message = Message {
-        is: false,
+        is_success: false,
         message: String::from("ng"),
     };
     if is_signin_success {
         Identity::login(&request.extensions(), mysql_auth_row.id.to_string().into()).unwrap();
-        message.is = true;
+        message.is_success = true;
         message.message = String::from("ok");
         Ok(HttpResponse::Ok().json(message))
     } else {
