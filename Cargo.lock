@@ -35,6 +35,20 @@ dependencies = [
 ]
 
 [[package]]
+name = "actix-csrf"
+version = "0.6.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "8a090daa2a8b7aaaaf585f6a0dd0fbee92ea81728c01cc45ae7643d13e51dd4f"
+dependencies = [
+ "actix-web",
+ "base64",
+ "cookie",
+ "rand",
+ "serde",
+ "tracing",
+]
+
+[[package]]
 name = "actix-http"
 version = "3.2.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -1479,11 +1493,13 @@ name = "rust_actix_web_sqlx"
 version = "0.1.0"
 dependencies = [
  "actix-cors",
+ "actix-csrf",
  "actix-identity",
  "actix-session",
  "actix-web",
  "dotenv",
  "pwhash",
+ "rand",
  "serde",
  "sqlx",
  "thiserror",
