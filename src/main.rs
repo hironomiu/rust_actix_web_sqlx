@@ -32,25 +32,30 @@ async fn main() -> Result<(), actix_web::Error> {
 
     let server_address = env::var("SERVER_ADDRESS").expect("SERVER_ADDRESS error");
     let cors_allowed_origin = env::var("CORS_ALLOWED_ORIGIN").expect("CORS_ALLOWED_ORIGIN error");
+    println!("allow-origin:{}", cors_allowed_origin);
     HttpServer::new(move || {
-        let csrf = CsrfMiddleware::<StdRng>::new().set_cookie(Method::GET, "/csrf");
+        let csrf = CsrfMiddleware::<StdRng>::new()
+            .http_only(false)
+            .set_cookie(Method::GET, "/csrf")
+            .cookie_name("csrf");
 
         let cors = Cors::default()
             .allowed_origin(&cors_allowed_origin)
-            // .allowed_origin_fn(|origin, _req_head| origin.as_bytes().ends_with(b".rust-lang.org"))
-            .allowed_methods(vec!["GET", "POST", "OPTION"])
+            .allowed_origin_fn(|origin, _req_head| origin.as_bytes().ends_with(b".rust-lang.org"))
+            // .allowed_origin_fn(|origin, _req_head| true)
+            .allowed_methods(vec!["GET", "POST"])
             .allowed_headers(vec![http::header::AUTHORIZATION, http::header::ACCEPT])
             .allowed_header(http::header::CONTENT_TYPE)
             .supports_credentials()
             .max_age(3600);
 
         App::new()
-            .wrap(csrf)
             .wrap(IdentityMiddleware::default())
             .wrap(SessionMiddleware::new(
                 CookieSessionStore::default(),
                 secret_key.clone(),
             ))
+            .wrap(csrf)
             .wrap(cors)
             .service(index)
             .service(csrf_index)
