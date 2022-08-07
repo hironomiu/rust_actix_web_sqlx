@@ -1,6 +1,6 @@
 use actix_csrf::extractor::{Csrf, CsrfGuarded, CsrfHeader, CsrfToken};
 use actix_identity::Identity;
-use actix_web::web::Json;
+// use actix_web::web::Json;
 use actix_web::{web, HttpMessage, HttpRequest, HttpResponse};
 use pwhash::bcrypt;
 use rust_actix_web_sqlx::databases::mysql;
@@ -94,12 +94,8 @@ pub async fn signin_post(
 }
 
 // TODO: actix-csrfだとhttponlyがfalseのため心もとない＆tokenとcookieの利用方法も不明瞭なので一旦CSRF対策は待ち
-pub async fn signout_post(
-    user: Identity,
-    json: Csrf<Json<Request>>,
-) -> Result<HttpResponse, Error> {
+pub async fn signout_post(user: Identity) -> Result<HttpResponse, Error> {
     println!("called");
-    // println!("csrf is {:?}", json.csrf_token());
     user.logout();
     Ok(HttpResponse::Ok().json("ok"))
 }
