@@ -1,11 +1,11 @@
 import React from 'react'
-import Main from './components/Main'
+import Layout from './components/Layout'
 import { RecoilRoot } from 'recoil'
 
 const App = () => {
   return (
     <RecoilRoot>
-      <Main />
+      <Layout />
     </RecoilRoot>
   )
 }
