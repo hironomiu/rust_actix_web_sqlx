@@ -1,5 +1,25 @@
 # client
 
+## Run
+
+```
+npm start
+```
+
+## Test
+
+```
+npm run test
+```
+
+## SetUp
+
+```
+npm install
+```
+
+## Install Memo
+
 ```
 npx create-react-app --template typescript .
 ```
