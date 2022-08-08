@@ -29,28 +29,9 @@ const SignIn = (props: Props) => {
   } = useForm<Schema>({
     resolver: zodResolver(schema),
   })
+
   return (
     <div>
-      <input
-        type="email"
-        placeholder="email"
-        value={props.user.email}
-        onChange={props.handleChangeEmail}
-        className=" border-2 h-12 mx-2 px-2 rounded"
-      />
-      <input
-        className="border-2 h-12 px-2 mx-2 rounded"
-        type="password"
-        placeholder="password"
-        value={props.user.password}
-        onChange={props.handleChangePassword}
-      />
-      <button
-        className="h-12 w-32 bg-green-500 rounded-md text-white font-bold mx-2"
-        onClick={props.handleClickSignin}
-      >
-        SignIn
-      </button>
       <form
         onSubmit={handleSubmit((d: any) => {
           console.log(d)
@@ -60,14 +41,21 @@ const SignIn = (props: Props) => {
       >
         <div>
           <input
-            {...register('email')}
+            {...(register('email'),
+            {
+              value: 'taro@example.com',
+            })}
             className=" border-2 h-12 mx-2 px-2 rounded"
           />
           {errors.email?.message && <p>{errors.email?.message}</p>}
         </div>
         <div>
           <input
-            {...register('password')}
+            type="password"
+            {...(register('password'),
+            {
+              value: 'password',
+            })}
             className=" border-2 h-12 mx-2 px-2 rounded"
           />
           {errors.password?.message && <p>{errors.password?.message}</p>}
@@ -75,6 +63,7 @@ const SignIn = (props: Props) => {
 
         <input
           type="submit"
+          value="SignIn"
           className="h-12 w-32 bg-green-500 rounded-md text-white font-bold mx-2"
         />
       </form>
