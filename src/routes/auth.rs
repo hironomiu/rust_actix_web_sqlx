@@ -34,7 +34,6 @@ pub struct MysqlRowAuth {
 
 #[derive(Debug, Serialize, Deserialize)]
 pub struct Message {
-    // TODO: is -> isSuccess (キャメル、スネークの対応)
     #[serde(rename(serialize = "isSuccess", deserialize = "is_success"))]
     is_success: bool,
     message: String,

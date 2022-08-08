@@ -34,12 +34,14 @@ npm install recoil
 
 [Install Tailwind CSS with Create React App](https://tailwindcss.com/docs/guides/create-react-app)
 
-## Zod
-
-```
-npm install zod
-```
-
 ## TanStack Query
 
 [installation](https://tanstack.com/query/v4/docs/installation)
+
+## react-hook-form + Zod
+
+```
+npm install react-hook-form
+npm install @hookform/resolvers
+npm install zod
+```
