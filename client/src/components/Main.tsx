@@ -11,6 +11,7 @@ import {
 } from '../queries'
 import { User } from '../types'
 import SignIn from './SignIn'
+import SignOut from './SignOut'
 
 const Main = () => {
   const [user, setUser] = useState<User>({
@@ -35,16 +36,21 @@ const Main = () => {
   }
 
   const handleClickSignin = () => {
-    console.log('called')
     signinMutation.mutate(user, {
       onSuccess: async (res: any) => {
         const json = await res.json()
-        if (json.isSuccess) {
-          setIsSignIn(true)
-        }
+        if (json.isSuccess) setIsSignIn(true)
       },
     })
   }
+
+  const handleClickSignout = () =>
+    signoutMutation.mutate(csrfToken, {
+      onSuccess: async (res: any) => {
+        const json = await res.json()
+        if (json.isSuccess) setIsSignIn(false)
+      },
+    })
 
   useEffect(() => {
     ;(async () => {
@@ -67,23 +73,7 @@ const Main = () => {
     <Suspense fallback={<div>loading...</div>}>
       <div className="flex justify-center items-center w-screen h-[100vh]">
         {isSignIn ? (
-          <div>
-            <button
-              className="h-12 w-32 bg-green-500 rounded-md text-white font-bold"
-              onClick={() =>
-                signoutMutation.mutate(csrfToken, {
-                  onSuccess: async (res: any) => {
-                    const json = await res.json()
-                    if (json.isSuccess) {
-                      setIsSignIn(false)
-                    }
-                  },
-                })
-              }
-            >
-              SignOut
-            </button>
-          </div>
+          <SignOut handleClickSignout={handleClickSignout} />
         ) : (
           <SignIn
             user={user}
