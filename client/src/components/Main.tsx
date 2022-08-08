@@ -69,6 +69,7 @@ const Main = () => {
       console.log('cookie:', csrfValue)
     })()
   }, [])
+
   return (
     <Suspense fallback={<div>loading...</div>}>
       <div className="flex justify-center items-center w-screen h-[100vh]">

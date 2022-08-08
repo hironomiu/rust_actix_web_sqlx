@@ -1,8 +1,7 @@
-import React from 'react'
-
 type Props = {
   handleClickSignout: () => void
 }
+
 const SignOut = (props: Props) => {
   return (
     <div>
