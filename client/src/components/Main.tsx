@@ -10,6 +10,7 @@ import {
   fetchCsrfTokeGet,
 } from '../queries'
 import { User } from '../types'
+import SignIn from './SignIn'
 
 const Main = () => {
   const [user, setUser] = useState<User>({
@@ -22,6 +23,7 @@ const Main = () => {
   const signoutMutation = useMutation((csrfToken: string) =>
     fetchSignoutPost(csrfToken)
   )
+
   const isSignIn = useRecoilValue(isSignInAtom)
   const setIsSignIn = useSetRecoilState(isSignInAtom)
 
@@ -30,6 +32,18 @@ const Main = () => {
   }
   const handleChangePassword = (e: any) => {
     setUser((prev) => ({ ...prev, password: e.target.value }))
+  }
+
+  const handleClickSignin = () => {
+    console.log('called')
+    signinMutation.mutate(user, {
+      onSuccess: async (res: any) => {
+        const json = await res.json()
+        if (json.isSuccess) {
+          setIsSignIn(true)
+        }
+      },
+    })
   }
 
   useEffect(() => {
@@ -71,37 +85,12 @@ const Main = () => {
             </button>
           </div>
         ) : (
-          <div>
-            <input
-              type="email"
-              placeholder="email"
-              value={user.email}
-              onChange={handleChangeEmail}
-              className=" border-2 h-12 mx-2 px-2 rounded"
-            />
-            <input
-              className="border-2 h-12 px-2 mx-2 rounded"
-              type="password"
-              placeholder="password"
-              value={user.password}
-              onChange={handleChangePassword}
-            />
-            <button
-              className="h-12 w-32 bg-green-500 rounded-md text-white font-bold mx-2"
-              onClick={() => {
-                signinMutation.mutate(user, {
-                  onSuccess: async (res: any) => {
-                    const json = await res.json()
-                    if (json.isSuccess) {
-                      setIsSignIn(true)
-                    }
-                  },
-                })
-              }}
-            >
-              SignIn
-            </button>
-          </div>
+          <SignIn
+            user={user}
+            handleChangeEmail={handleChangeEmail}
+            handleChangePassword={handleChangePassword}
+            handleClickSignin={handleClickSignin}
+          />
         )}
       </div>
     </Suspense>
