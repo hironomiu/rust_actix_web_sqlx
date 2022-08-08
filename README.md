@@ -9,7 +9,7 @@ cargo run
 ## Watch
 
 ```
-cargo watch -x run
+cargo watch -w ./src -x run
 ```
 
 ## curl

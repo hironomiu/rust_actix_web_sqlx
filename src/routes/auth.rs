@@ -97,5 +97,10 @@ pub async fn signin_post(
 pub async fn signout_post(user: Identity) -> Result<HttpResponse, Error> {
     println!("called");
     user.logout();
-    Ok(HttpResponse::Ok().json("ok"))
+    let message = Message {
+        is_success: true,
+        message: String::from("success"),
+    };
+
+    Ok(HttpResponse::Ok().json(message))
 }

@@ -1,11 +1,16 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, Suspense } from 'react'
 import { useRecoilValue, useSetRecoilState } from 'recoil'
 import { isSignInAtom } from '../recoil'
+import { z } from 'zod'
+import { useMutation } from '@tanstack/react-query'
+import {
+  fetchSigninPost,
+  fetchSignoutPost,
+  fetchSigninGet,
+  fetchCsrfTokeGet,
+} from '../queries'
+import { User } from '../types'
 
-type User = {
-  email: string
-  password: string
-}
 const Main = () => {
   const [user, setUser] = useState<User>({
     email: 'taro@example.com',
@@ -13,47 +18,12 @@ const Main = () => {
   })
   const [csrfToken, setCsrfToken] = useState<string>('')
 
+  const signinMutation = useMutation((user: User) => fetchSigninPost(user))
+  const signoutMutation = useMutation((csrfToken: string) =>
+    fetchSignoutPost(csrfToken)
+  )
   const isSignIn = useRecoilValue(isSignInAtom)
   const setIsSignIn = useSetRecoilState(isSignInAtom)
-  const fetchSigninPost = async () => {
-    const response = await fetch('http://localhost:8686/api/v1/auth/signin', {
-      method: 'POST',
-      mode: 'cors',
-      cache: 'no-cache',
-      credentials: 'include',
-      redirect: 'follow',
-      headers: {
-        'Content-Type': 'application/json',
-        // 'CSRF-Token': csrfToken,
-      },
-      body: JSON.stringify({ ...user }),
-    })
-
-    const json = await response.json()
-    console.log('response:', await json)
-    if (json.isSuccess) {
-      setIsSignIn(true)
-    }
-  }
-
-  const fetchSignoutPost = async () => {
-    console.log(csrfToken)
-    const response = await fetch('http://localhost:8686/api/v1/auth/signout', {
-      method: 'POST',
-      mode: 'cors',
-      cache: 'no-cache',
-      credentials: 'include',
-      redirect: 'follow',
-      headers: {
-        'Content-Type': 'application/json',
-        // 'Csrf-Token': csrfToken,
-      },
-      body: JSON.stringify({ csrf: csrfToken }),
-    })
-
-    console.log('response:', await response.json())
-    setIsSignIn(false)
-  }
 
   const handleChangeEmail = (e: any) => {
     setUser((prev) => ({ ...prev, email: e.target.value }))
@@ -63,87 +33,78 @@ const Main = () => {
   }
 
   useEffect(() => {
-    const fetchSigninGet = async () => {
-      const response = await fetch('http://localhost:8686/api/v1/auth/signin', {
-        method: 'GET',
-        mode: 'cors',
-        cache: 'no-cache',
-        credentials: 'include',
-        redirect: 'follow',
-        headers: {
-          // 'CSRF-Token': data.csrfToken,
-        },
-      })
-      const json = await response.json()
-
+    ;(async () => {
+      const json = await fetchSigninGet()
       console.log(json)
       if (json.isSuccess) {
         setIsSignIn(true)
       }
-    }
-    ;(async () => {
-      await fetchSigninGet()
     })()
   }, [setIsSignIn])
 
   useEffect(() => {
-    const fetchCsrfTokeGet = async () => {
-      const response = await fetch('http://localhost:8686/csrf', {
-        method: 'GET',
-        mode: 'cors',
-        cache: 'no-cache',
-        credentials: 'include',
-        redirect: 'follow',
-        headers: {
-          // 'CSRF-Token': data.csrfToken,
-        },
-      })
-      const json = await response.json()
-      console.log(json)
-      const csrfValue = document.cookie.split('=')[1]
+    ;(async () => {
+      const csrfValue: string = await fetchCsrfTokeGet()
       setCsrfToken(csrfValue)
       console.log('cookie:', csrfValue)
-    }
-    ;(async () => {
-      fetchCsrfTokeGet()
     })()
   }, [])
   return (
-    <div className="flex justify-center items-center w-screen h-[100vh]">
-      {isSignIn ? (
-        <div>
-          <button
-            className="h-12 w-32 bg-green-500 rounded-md text-white font-bold"
-            onClick={fetchSignoutPost}
-          >
-            SignOut
-          </button>
-        </div>
-      ) : (
-        <div>
-          <input
-            type="email"
-            placeholder="email"
-            value={user.email}
-            onChange={handleChangeEmail}
-            className=" border-2 h-12 mx-2 px-2 rounded"
-          />
-          <input
-            className="border-2 h-12 px-2 mx-2 rounded"
-            type="password"
-            placeholder="password"
-            value={user.password}
-            onChange={handleChangePassword}
-          />
-          <button
-            className="h-12 w-32 bg-green-500 rounded-md text-white font-bold mx-2"
-            onClick={fetchSigninPost}
-          >
-            SignIn
-          </button>
-        </div>
-      )}
-    </div>
+    <Suspense fallback={<div>loading...</div>}>
+      <div className="flex justify-center items-center w-screen h-[100vh]">
+        {isSignIn ? (
+          <div>
+            <button
+              className="h-12 w-32 bg-green-500 rounded-md text-white font-bold"
+              onClick={() =>
+                signoutMutation.mutate(csrfToken, {
+                  onSuccess: async (res: any) => {
+                    const json = await res.json()
+                    if (json.isSuccess) {
+                      setIsSignIn(false)
+                    }
+                  },
+                })
+              }
+            >
+              SignOut
+            </button>
+          </div>
+        ) : (
+          <div>
+            <input
+              type="email"
+              placeholder="email"
+              value={user.email}
+              onChange={handleChangeEmail}
+              className=" border-2 h-12 mx-2 px-2 rounded"
+            />
+            <input
+              className="border-2 h-12 px-2 mx-2 rounded"
+              type="password"
+              placeholder="password"
+              value={user.password}
+              onChange={handleChangePassword}
+            />
+            <button
+              className="h-12 w-32 bg-green-500 rounded-md text-white font-bold mx-2"
+              onClick={() => {
+                signinMutation.mutate(user, {
+                  onSuccess: async (res: any) => {
+                    const json = await res.json()
+                    if (json.isSuccess) {
+                      setIsSignIn(true)
+                    }
+                  },
+                })
+              }}
+            >
+              SignIn
+            </button>
+          </div>
+        )}
+      </div>
+    </Suspense>
   )
 }
 
