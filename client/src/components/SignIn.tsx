@@ -19,12 +19,14 @@ const schema = z.object({
   password: z.string().min(8, { message: 'Required' }),
 })
 
+type Schema = z.infer<typeof schema>
+
 const SignIn = (props: Props) => {
   const {
     register,
     handleSubmit,
     formState: { errors },
-  }: any = useForm({
+  } = useForm<Schema>({
     resolver: zodResolver(schema),
   })
   return (
