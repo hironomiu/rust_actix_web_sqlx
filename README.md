@@ -112,4 +112,6 @@ cargo add sqlx --features="macros" --features="runtime-actix-rustls" --features=
 cargo add thiserror
 cargo add tracing
 cargo add dotenv
+cargo add actix-web-validator
+cargo add validator --features="derive"
 ```

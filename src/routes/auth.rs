@@ -5,7 +5,8 @@ use actix_web::{web, HttpMessage, HttpRequest, HttpResponse};
 use pwhash::bcrypt;
 use rust_actix_web_sqlx::databases::mysql;
 use rust_actix_web_sqlx::errors::Error;
-use serde::{Deserialize, Serialize};
+use rust_actix_web_sqlx::structs::{Auth, Message, MysqlRowAuth};
+use serde::Deserialize;
 
 #[derive(Deserialize)]
 pub struct Request {
@@ -17,26 +18,6 @@ impl CsrfGuarded for Request {
         println!("called");
         &self.csrf
     }
-}
-
-#[derive(Debug, Serialize, Deserialize, sqlx::FromRow)]
-pub struct Auth {
-    email: String,
-    password: String,
-}
-
-#[derive(Debug, Serialize, Deserialize, sqlx::FromRow)]
-pub struct MysqlRowAuth {
-    id: u32,
-    email: String,
-    password: String,
-}
-
-#[derive(Debug, Serialize, Deserialize)]
-pub struct Message {
-    #[serde(rename(serialize = "isSuccess", deserialize = "is_success"))]
-    is_success: bool,
-    message: String,
 }
 
 pub async fn signin_get(user: Option<Identity>) -> Result<HttpResponse, Error> {

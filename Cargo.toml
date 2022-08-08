@@ -11,6 +11,7 @@ actix-csrf = "0.6.1"
 actix-identity = "0.5.2"
 actix-session = { version = "0.7.1", features=["cookie-session"] }
 actix-web = "4.1.0"
+actix-web-validator = "4.0.0"
 dotenv = "0.15.0"
 pwhash = "1.0.0"
 rand = "0.8.5"
@@ -18,3 +19,4 @@ serde = { version = "1.0.141", features = ["derive"] }
 sqlx = { version = "0.6.0", features = ["macros", "runtime-actix-rustls", "mysql", "sqlite"] }
 thiserror = "1.0.31"
 tracing = "0.1.36"
+validator = { version = "0.16.0", features = ["derive"] }
