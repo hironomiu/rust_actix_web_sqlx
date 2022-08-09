@@ -41,10 +41,7 @@ const SignIn = (props: Props) => {
       >
         <div>
           <input
-            {...(register('email'),
-            {
-              value: 'taro@example.com',
-            })}
+            {...register('email')}
             className=" border-2 h-12 mx-2 px-2 rounded"
           />
           {errors.email?.message && <p>{errors.email?.message}</p>}
@@ -52,10 +49,7 @@ const SignIn = (props: Props) => {
         <div>
           <input
             type="password"
-            {...(register('password'),
-            {
-              value: 'password',
-            })}
+            {...register('password')}
             className=" border-2 h-12 mx-2 px-2 rounded"
           />
           {errors.password?.message && <p>{errors.password?.message}</p>}

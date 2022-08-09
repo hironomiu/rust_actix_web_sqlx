@@ -1,4 +1,6 @@
 use serde::{Deserialize, Serialize};
+use validator::Validate;
+
 #[derive(Debug, Deserialize, Serialize)]
 pub struct SamplePost {
     pub title: String,
@@ -12,9 +14,11 @@ pub struct SampleRow {
     pub body: String,
 }
 
-#[derive(Debug, Serialize, Deserialize, sqlx::FromRow)]
+#[derive(Debug, Serialize, Deserialize, sqlx::FromRow, Validate)]
 pub struct Auth {
+    #[validate(length(min = 3))]
     pub email: String,
+    #[validate(length(min = 3))]
     pub password: String,
 }
 

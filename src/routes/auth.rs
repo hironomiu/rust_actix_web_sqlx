@@ -1,24 +1,26 @@
-use actix_csrf::extractor::{Csrf, CsrfGuarded, CsrfHeader, CsrfToken};
+// use actix_csrf::extractor::{Csrf, CsrfGuarded, CsrfHeader, CsrfToken};
 use actix_identity::Identity;
 // use actix_web::web::Json;
 use actix_web::{web, HttpMessage, HttpRequest, HttpResponse};
+// use actix_web_validator::Json;
 use pwhash::bcrypt;
 use rust_actix_web_sqlx::databases::mysql;
 use rust_actix_web_sqlx::errors::Error;
 use rust_actix_web_sqlx::structs::{Auth, Message, MysqlRowAuth};
 use serde::Deserialize;
+use validator::Validate;
 
-#[derive(Deserialize)]
-pub struct Request {
-    csrf: CsrfToken,
-}
+// #[derive(Deserialize)]
+// pub struct Request {
+//     csrf: CsrfToken,
+// }
 
-impl CsrfGuarded for Request {
-    fn csrf_token(&self) -> &CsrfToken {
-        println!("called");
-        &self.csrf
-    }
-}
+// impl CsrfGuarded for Request {
+//     fn csrf_token(&self) -> &CsrfToken {
+//         println!("called");
+//         &self.csrf
+//     }
+// }
 
 pub async fn signin_get(user: Option<Identity>) -> Result<HttpResponse, Error> {
     let mut message: Message = Message {
@@ -34,10 +36,24 @@ pub async fn signin_get(user: Option<Identity>) -> Result<HttpResponse, Error> {
     Ok(HttpResponse::Ok().json(message))
 }
 
+#[derive(Deserialize, Validate)]
+struct Info {
+    #[validate(length(min = 3))]
+    email: String,
+    #[validate(length(min = 1))]
+    password: String,
+}
+
 pub async fn signin_post(
     request: HttpRequest,
     args: web::Json<Auth>,
+    // info: Json<Info>,
 ) -> Result<HttpResponse, Error> {
+    match args.validate() {
+        Ok(_) => (),
+        Err(error) => panic!("{:?}", error),
+    }
+
     let pool = match mysql::create_mysql_connection_pool().await {
         Ok(pool) => pool,
         Err(_) => panic!("error"),
