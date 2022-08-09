@@ -23,14 +23,16 @@ use validator::Validate;
 // }
 
 pub async fn signin_get(user: Option<Identity>) -> Result<HttpResponse, Error> {
+    println!("called get:{:?}", user.is_none());
     let mut message: Message = Message {
         is_success: false,
         message: String::from("ng"),
     };
 
-    if let Some(_) = user {
+    if let Some(user) = user {
         message.is_success = true;
         message.message = String::from("ok");
+        println!("hoge{:?}", user.id());
         return Ok(HttpResponse::Ok().json(message));
     }
     Ok(HttpResponse::Ok().json(message))

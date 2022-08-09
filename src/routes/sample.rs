@@ -19,7 +19,7 @@ pub async fn get(user: Identity) -> Result<HttpResponse, errors::Error> {
         Ok(rows) => rows,
         Err(_) => panic!("error"),
     };
-    println!("MySQL: {:?}", mysql_sample_rows);
+    println!("MySQL rows: {}", mysql_sample_rows.len());
 
     // MEMO: ---------- sqlite ----------
     let mut sqlite_conn = match sqlite::connect_sqlite_db().await {
@@ -34,7 +34,7 @@ pub async fn get(user: Identity) -> Result<HttpResponse, errors::Error> {
         Ok(rows) => rows,
         Err(_) => panic!("error"),
     };
-    println!("sqlite: {:?}", rows);
+    println!("sqlite rows: {}", rows.len());
 
     Ok(HttpResponse::Ok().json(mysql_sample_rows))
 }

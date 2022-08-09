@@ -3,7 +3,10 @@ use actix_csrf::extractor::CsrfToken;
 use actix_csrf::CsrfMiddleware;
 
 use actix_identity::IdentityMiddleware;
-use actix_session::{storage::CookieSessionStore, SessionMiddleware};
+use actix_session::{
+    storage::{CookieSessionStore, RedisSessionStore},
+    Session, SessionMiddleware,
+};
 use actix_web::cookie::Key;
 use actix_web::http::Method;
 use actix_web::{get, http, web, App, HttpResponse, HttpServer};
@@ -32,6 +35,9 @@ async fn main() -> Result<(), actix_web::Error> {
 
     let server_address = env::var("SERVER_ADDRESS").expect("SERVER_ADDRESS error");
     let cors_allowed_origin = env::var("CORS_ALLOWED_ORIGIN").expect("CORS_ALLOWED_ORIGIN error");
+    let redis_store = RedisSessionStore::new("redis://127.0.0.1:6379")
+        .await
+        .unwrap();
     println!("allow-origin:{}", cors_allowed_origin);
     HttpServer::new(move || {
         let csrf = CsrfMiddleware::<StdRng>::new()
@@ -52,7 +58,8 @@ async fn main() -> Result<(), actix_web::Error> {
         App::new()
             .wrap(IdentityMiddleware::default())
             .wrap(SessionMiddleware::new(
-                CookieSessionStore::default(),
+                // CookieSessionStore::default(),
+                redis_store.clone(),
                 secret_key.clone(),
             ))
             .wrap(csrf)
