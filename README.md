@@ -46,6 +46,15 @@ curl -X POST -H 'Content-Type: application/json' localhost:8686/api/v1/auth/sign
 
 ## SetUp
 
+### Redis
+
+session storeでRedisを利用。Redisがない場合は以下のDockerで構築する方法を利用（`some-redis`は適時命名すること）
+
+```
+docker pull redis
+docker run -p 6379:6379 --name some-redis -d redis
+```
+
 ### .env
 
 |変数|設定値|
