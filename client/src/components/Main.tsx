@@ -14,10 +14,6 @@ import SignOut from './SignOut'
 import Sample from './Sample'
 
 const Main = () => {
-  const [user, setUser] = useState<User>({
-    email: 'taro@example.com',
-    password: 'password',
-  })
   const [csrfToken, setCsrfToken] = useState<string>('')
 
   const signinMutation = useMutation((user: User) => fetchSigninPost(user))
@@ -28,14 +24,7 @@ const Main = () => {
   const isSignIn = useRecoilValue(isSignInAtom)
   const setIsSignIn = useSetRecoilState(isSignInAtom)
 
-  const handleChangeEmail = (e: any) => {
-    setUser((prev) => ({ ...prev, email: e.target.value }))
-  }
-  const handleChangePassword = (e: any) => {
-    setUser((prev) => ({ ...prev, password: e.target.value }))
-  }
-
-  const handleClickSignin = () => {
+  const handleClickSignin = (user: User) => {
     signinMutation.mutate(user, {
       onSuccess: async (res: any) => {
         const json = await res.json()
@@ -79,12 +68,7 @@ const Main = () => {
             <SignOut handleClickSignout={handleClickSignout} />
           </div>
         ) : (
-          <SignIn
-            user={user}
-            handleChangeEmail={handleChangeEmail}
-            handleChangePassword={handleChangePassword}
-            handleClickSignin={handleClickSignin}
-          />
+          <SignIn handleClickSignin={handleClickSignin} />
         )}
       </div>
     </Suspense>

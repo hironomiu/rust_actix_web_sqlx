@@ -5,6 +5,7 @@ use rust_actix_web_sqlx::errors;
 use rust_actix_web_sqlx::structs::{SamplePost, SampleRow};
 
 pub async fn get(user: Identity) -> Result<HttpResponse, errors::Error> {
+    println!("{:?}", user.id());
     // MEMO: ---------- MySQL ----------
     let pool = match mysql::create_mysql_connection_pool().await {
         Ok(pool) => pool,

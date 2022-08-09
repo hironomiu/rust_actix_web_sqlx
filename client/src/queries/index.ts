@@ -1,6 +1,7 @@
 import { User } from '../types'
 
 export const fetchSigninPost = async (user: User) => {
+  console.log(user)
   const response = await fetch('http://localhost:8686/api/v1/auth/signin', {
     method: 'POST',
     mode: 'cors',

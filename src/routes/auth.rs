@@ -80,6 +80,7 @@ pub async fn signin_post(
         message: String::from("ng"),
     };
     if is_signin_success {
+        println!("id:{}", mysql_auth_row.email);
         Identity::login(&request.extensions(), mysql_auth_row.id.to_string().into()).unwrap();
         message.is_success = true;
         message.message = String::from("ok");

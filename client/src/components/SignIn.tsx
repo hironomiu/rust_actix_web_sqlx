@@ -2,13 +2,10 @@ import React from 'react'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import * as z from 'zod'
-
+import { User } from '../types/index'
 // TODO: 型
 type Props = {
-  user: any
-  handleChangeEmail: any
-  handleChangePassword: any
-  handleClickSignin: () => void
+  handleClickSignin: (user: User) => void
 }
 
 const schema = z.object({
@@ -33,9 +30,9 @@ const SignIn = (props: Props) => {
   return (
     <div>
       <form
-        onSubmit={handleSubmit((d: any) => {
-          console.log(d)
-          props.handleClickSignin()
+        onSubmit={handleSubmit((user: User) => {
+          console.log(user)
+          props.handleClickSignin(user)
         })}
         className="my-2 flex"
       >
