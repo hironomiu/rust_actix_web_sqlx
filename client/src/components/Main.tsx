@@ -11,6 +11,7 @@ import {
 import { User } from '../types'
 import SignIn from './SignIn'
 import SignOut from './SignOut'
+import Sample from './Sample'
 
 const Main = () => {
   const [user, setUser] = useState<User>({
@@ -73,7 +74,10 @@ const Main = () => {
     <Suspense fallback={<div>loading...</div>}>
       <div className="flex justify-center items-center w-screen h-[100vh]">
         {isSignIn ? (
-          <SignOut handleClickSignout={handleClickSignout} />
+          <div>
+            <Sample />
+            <SignOut handleClickSignout={handleClickSignout} />
+          </div>
         ) : (
           <SignIn
             user={user}

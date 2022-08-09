@@ -1,9 +1,10 @@
+use actix_identity::Identity;
 use actix_web::{web, HttpResponse};
 use rust_actix_web_sqlx::databases::{mysql, sqlite};
 use rust_actix_web_sqlx::errors;
 use rust_actix_web_sqlx::structs::{SamplePost, SampleRow};
 
-pub async fn get() -> Result<HttpResponse, errors::Error> {
+pub async fn get(user: Identity) -> Result<HttpResponse, errors::Error> {
     // MEMO: ---------- MySQL ----------
     let pool = match mysql::create_mysql_connection_pool().await {
         Ok(pool) => pool,
