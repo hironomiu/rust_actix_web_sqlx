@@ -18,11 +18,13 @@ const Sample = () => {
   }, [])
 
   return (
-    <div>
+    <ul>
       {data.map((d: any) => (
-        <div key={d.id}>{d.title}</div>
+        <li key={d.id} className="my-2">
+          {d.title}:{d.body}
+        </li>
       ))}
-    </div>
+    </ul>
   )
 }
 
