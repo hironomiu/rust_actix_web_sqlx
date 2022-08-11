@@ -34,7 +34,7 @@ const SignIn = (props: Props) => {
           console.log(user)
           props.handleClickSignin(user)
         })}
-        className="my-2 flex"
+        className="my-2 sm:flex"
       >
         <div>
           <input
