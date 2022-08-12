@@ -3,10 +3,7 @@ use actix_csrf::extractor::CsrfToken;
 use actix_csrf::CsrfMiddleware;
 
 use actix_identity::IdentityMiddleware;
-use actix_session::{
-    storage::{CookieSessionStore, RedisSessionStore},
-    Session, SessionMiddleware,
-};
+use actix_session::{storage::RedisSessionStore, SessionMiddleware};
 use actix_web::cookie::Key;
 use actix_web::http::Method;
 use actix_web::{get, http, web, App, HttpResponse, HttpServer};
