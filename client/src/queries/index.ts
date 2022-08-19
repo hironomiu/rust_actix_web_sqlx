@@ -1,12 +1,12 @@
 import { User } from '../types'
 
 export const fetchSigninPost = async (user: User) => {
-  console.log(user)
+  console.log('called:', user)
   const response = await fetch('http://localhost:8686/api/v1/auth/signin', {
     method: 'POST',
     mode: 'cors',
     cache: 'no-cache',
-    credentials: 'include',
+    // credentials: 'include',
     redirect: 'follow',
     headers: {
       'Content-Type': 'application/json',
@@ -41,7 +41,7 @@ export const fetchSigninGet = async () => {
     method: 'GET',
     mode: 'cors',
     cache: 'no-cache',
-    credentials: 'include',
+    // credentials: 'include',
     redirect: 'follow',
     headers: {
       // 'CSRF-Token': data.csrfToken,

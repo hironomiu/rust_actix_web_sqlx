@@ -86,6 +86,7 @@ pub async fn signin_post(
         Identity::login(&request.extensions(), mysql_auth_row.id.to_string().into()).unwrap();
         message.is_success = true;
         message.message = String::from("ok");
+        println!("OKOKOKOKOK");
         Ok(HttpResponse::Ok().json(message))
     } else {
         Ok(HttpResponse::Ok().json(message))

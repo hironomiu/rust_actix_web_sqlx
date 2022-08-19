@@ -51,13 +51,13 @@ const Main = () => {
     })()
   }, [setIsSignIn])
 
-  useEffect(() => {
-    ;(async () => {
-      const csrfValue: string = await fetchCsrfTokeGet()
-      setCsrfToken(csrfValue)
-      console.log('cookie:', csrfValue)
-    })()
-  }, [])
+  // useEffect(() => {
+  //   ;(async () => {
+  //     const csrfValue: string = await fetchCsrfTokeGet()
+  //     setCsrfToken(csrfValue)
+  //     console.log('cookie:', csrfValue)
+  //   })()
+  // }, [])
 
   return (
     <Suspense fallback={<div>loading...</div>}>

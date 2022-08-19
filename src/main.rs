@@ -1,5 +1,5 @@
 use actix_cors::Cors;
-use actix_csrf::extractor::CsrfToken;
+// use actix_csrf::extractor::CsrfToken;
 use actix_csrf::CsrfMiddleware;
 
 use actix_identity::IdentityMiddleware;
@@ -18,11 +18,11 @@ async fn index() -> Result<HttpResponse, actix_web::Error> {
     Ok(HttpResponse::Ok().body(response_body))
 }
 
-#[get("/csrf")]
-async fn csrf_index(token: CsrfToken) -> Result<HttpResponse, actix_web::Error> {
-    println!("csrf token value {:?}", token.get());
-    Ok(HttpResponse::Ok().json(token.get()))
-}
+// #[get("/csrf")]
+// async fn csrf_index(token: CsrfToken) -> Result<HttpResponse, actix_web::Error> {
+//     println!("csrf token value {:?}", token.get());
+//     Ok(HttpResponse::Ok().json(token.get()))
+// }
 
 #[actix_web::main]
 async fn main() -> Result<(), actix_web::Error> {
@@ -36,6 +36,7 @@ async fn main() -> Result<(), actix_web::Error> {
         .await
         .unwrap();
     println!("allow-origin:{}", cors_allowed_origin);
+    println!("server_address:{}", server_address);
     HttpServer::new(move || {
         let csrf = CsrfMiddleware::<StdRng>::new()
             .http_only(false)
@@ -44,9 +45,9 @@ async fn main() -> Result<(), actix_web::Error> {
 
         let cors = Cors::default()
             .allowed_origin(&cors_allowed_origin)
-            .allowed_origin_fn(|origin, _req_head| origin.as_bytes().ends_with(b".rust-lang.org"))
-            // .allowed_origin_fn(|origin, _req_head| true)
-            .allowed_methods(vec!["GET", "POST"])
+            // .allowed_origin_fn(|origin, _req_head| origin.as_bytes().ends_with(b".rust-lang.org"))
+            .allowed_origin_fn(|_origin, _req_head| true)
+            .allowed_methods(vec!["GET", "POST", "OPTIONS"])
             .allowed_headers(vec![http::header::AUTHORIZATION, http::header::ACCEPT])
             .allowed_header(http::header::CONTENT_TYPE)
             .supports_credentials()
@@ -62,7 +63,7 @@ async fn main() -> Result<(), actix_web::Error> {
             .wrap(csrf)
             .wrap(cors)
             .service(index)
-            .service(csrf_index)
+            // .service(csrf_index)
             .service(
                 web::scope("/api").service(
                     web::scope("/v1")
