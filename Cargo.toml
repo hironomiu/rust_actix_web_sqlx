@@ -7,7 +7,6 @@ edition = "2021"
 
 [dependencies]
 actix-cors = "0.6.1"
-actix-csrf = "0.6.1"
 actix-identity = "0.5.2"
 actix-session = { version = "0.7.1", features=["cookie-session","redis-rs-session"] }
 actix-web = "4.1.0"
