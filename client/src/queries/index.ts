@@ -6,7 +6,7 @@ export const fetchSigninPost = async (user: User) => {
     method: 'POST',
     mode: 'cors',
     cache: 'no-cache',
-    // credentials: 'include',
+    credentials: 'include',
     redirect: 'follow',
     headers: {
       'Content-Type': 'application/json',
@@ -41,7 +41,7 @@ export const fetchSigninGet = async () => {
     method: 'GET',
     mode: 'cors',
     cache: 'no-cache',
-    // credentials: 'include',
+    credentials: 'include',
     redirect: 'follow',
     headers: {
       // 'CSRF-Token': data.csrfToken,

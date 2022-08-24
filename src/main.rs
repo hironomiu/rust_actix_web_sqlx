@@ -60,7 +60,7 @@ async fn main() -> Result<(), actix_web::Error> {
                 redis_store.clone(),
                 secret_key.clone(),
             ))
-            .wrap(csrf)
+            // .wrap(csrf)
             .wrap(cors)
             .service(index)
             // .service(csrf_index)
