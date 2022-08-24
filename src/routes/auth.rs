@@ -8,20 +8,17 @@ use serde::Deserialize;
 use validator::Validate;
 
 pub async fn signin_get(user: Option<Identity>) -> Result<HttpResponse, Error> {
-    println!("called get user is_none:{:?}", user.is_none());
+    println!("GET /signin is_none:{:?}", user.is_none());
     let mut message: Message = Message {
         is_success: false,
         message: String::from("ng"),
     };
 
-    if let Some(user) = user {
+    if let Some(_user) = user {
         message.is_success = true;
         message.message = String::from("ok");
-        println!("hoge{:?}", user.id());
         return Ok(HttpResponse::Ok().json(message));
     }
-
-    println!("no user");
 
     Ok(HttpResponse::Ok().json(message))
 }
@@ -37,7 +34,6 @@ struct Info {
 pub async fn signin_post(
     request: HttpRequest,
     args: web::Json<Auth>,
-    // info: Json<Info>,
 ) -> Result<HttpResponse, Error> {
     match args.validate() {
         Ok(_) => (),
@@ -74,7 +70,6 @@ pub async fn signin_post(
         Identity::login(&request.extensions(), mysql_auth_row.id.to_string().into()).unwrap();
         message.is_success = true;
         message.message = String::from("ok");
-        println!("OKOKOKOKOK");
         Ok(HttpResponse::Ok().json(message))
     } else {
         Ok(HttpResponse::Ok().json(message))
@@ -83,7 +78,7 @@ pub async fn signin_post(
 
 // TODO: actix-csrfだとhttponlyがfalseのため心もとない＆tokenとcookieの利用方法も不明瞭なので一旦CSRF対策は待ち
 pub async fn signout_post(user: Identity) -> Result<HttpResponse, Error> {
-    println!("called");
+    println!("POST /signout");
     user.logout();
     let message = Message {
         is_success: true,
