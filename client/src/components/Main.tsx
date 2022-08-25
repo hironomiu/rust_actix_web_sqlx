@@ -1,25 +1,16 @@
-import { useState, useEffect, Suspense } from 'react'
+import { useEffect, Suspense } from 'react'
 import { useRecoilValue, useSetRecoilState } from 'recoil'
 import { isSignInAtom } from '../recoil'
 import { useMutation } from '@tanstack/react-query'
-import {
-  fetchSigninPost,
-  fetchSignoutPost,
-  fetchSigninGet,
-  fetchCsrfTokeGet,
-} from '../queries'
+import { fetchSigninPost, fetchSignoutPost, fetchSigninGet } from '../queries'
 import { User } from '../types'
 import SignIn from './SignIn'
 import SignOut from './SignOut'
 import Sample from './Sample'
 
 const Main = () => {
-  const [csrfToken, setCsrfToken] = useState<string>('')
-
   const signinMutation = useMutation((user: User) => fetchSigninPost(user))
-  const signoutMutation = useMutation((csrfToken: string) =>
-    fetchSignoutPost(csrfToken)
-  )
+  const signoutMutation = useMutation((bool: boolean) => fetchSignoutPost())
 
   const isSignIn = useRecoilValue(isSignInAtom)
   const setIsSignIn = useSetRecoilState(isSignInAtom)
@@ -34,7 +25,8 @@ const Main = () => {
   }
 
   const handleClickSignout = () =>
-    signoutMutation.mutate(csrfToken, {
+    // TODO: mutateの引数（不要なので指定しない方法を探す）
+    signoutMutation.mutate(false, {
       onSuccess: async (res: any) => {
         const json = await res.json()
         if (json.isSuccess) setIsSignIn(false)
@@ -50,14 +42,6 @@ const Main = () => {
       }
     })()
   }, [setIsSignIn])
-
-  // useEffect(() => {
-  //   ;(async () => {
-  //     const csrfValue: string = await fetchCsrfTokeGet()
-  //     setCsrfToken(csrfValue)
-  //     console.log('cookie:', csrfValue)
-  //   })()
-  // }, [])
 
   return (
     <Suspense fallback={<div>loading...</div>}>

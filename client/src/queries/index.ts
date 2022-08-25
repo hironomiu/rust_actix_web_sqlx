@@ -18,8 +18,7 @@ export const fetchSigninPost = async (user: User) => {
   return response
 }
 
-export const fetchSignoutPost = async (csrfToken: string) => {
-  console.log(csrfToken)
+export const fetchSignoutPost = async () => {
   const response = await fetch('http://localhost:8686/api/v1/auth/signout', {
     method: 'POST',
     mode: 'cors',
@@ -28,9 +27,7 @@ export const fetchSignoutPost = async (csrfToken: string) => {
     redirect: 'follow',
     headers: {
       'Content-Type': 'application/json',
-      // 'Csrf-Token': csrfToken,
     },
-    body: JSON.stringify({ csrf: csrfToken }),
   })
 
   return response
