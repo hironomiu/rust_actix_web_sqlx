@@ -45,3 +45,10 @@ npm install react-hook-form
 npm install @hookform/resolvers
 npm install zod
 ```
+
+## react-icons
+
+```
+npm install react-icons
+npm install --save-dev @types/react-icons
+```
