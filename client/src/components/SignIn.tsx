@@ -1,12 +1,13 @@
-import React from 'react'
+import { useEffect } from 'react'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import * as z from 'zod'
 import { User } from '../types/index'
-// TODO: 型
-type Props = {
-  handleClickSignin: (user: User) => void
-}
+import { useMutation } from '@tanstack/react-query'
+import { fetchSigninPost } from '../queries'
+import { useRecoilValue, useSetRecoilState } from 'recoil'
+import { isSignInAtom } from '../recoil'
+import { useNavigate } from 'react-router-dom'
 
 const schema = z.object({
   email: z
@@ -18,7 +19,10 @@ const schema = z.object({
 
 type Schema = z.infer<typeof schema>
 
-const SignIn = (props: Props) => {
+const SignIn = () => {
+  const navigate = useNavigate()
+  const isSignIn = useRecoilValue(isSignInAtom)
+  const signinMutation = useMutation((user: User) => fetchSigninPost(user))
   const {
     register,
     handleSubmit,
@@ -27,12 +31,29 @@ const SignIn = (props: Props) => {
     resolver: zodResolver(schema),
   })
 
+  const setIsSignIn = useSetRecoilState(isSignInAtom)
+
+  const handleClickSignin = (user: User) => {
+    signinMutation.mutate(user, {
+      onSuccess: async (res: any) => {
+        const json = await res.json()
+        if (json.isSuccess) setIsSignIn(true)
+      },
+    })
+  }
+
+  useEffect(() => {
+    if (isSignIn) {
+      navigate('/')
+    }
+  }, [isSignIn, navigate])
+
   return (
     <div>
       <form
         onSubmit={handleSubmit((user: User) => {
           console.log(user)
-          props.handleClickSignin(user)
+          handleClickSignin(user)
         })}
         className="my-2 sm:flex"
       >

@@ -22,6 +22,7 @@ npm install
 
 ```
 npx create-react-app --template typescript .
+npm install react-router-dom
 ```
 
 ## Recoil

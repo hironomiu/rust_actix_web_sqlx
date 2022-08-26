@@ -40,14 +40,15 @@ const Header = () => {
       <div
         className={
           isMenuOpen
-            ? 'fixed top-0 left-0 h-full w-[60%] ease-in-out duration-1000 bg-white'
-            : 'hidden'
+            ? 'md:hidden fixed top-0 left-0 h-full w-[60%] bg-white ease-in-out duration-500 pl-4'
+            : 'fixed left-[-150px] top-0 h-full ease-in-out duration-1000'
         }
       >
-        <ul className="flex flex-col mr-4">
-          <li className="mx-2 text-2xl">hoge</li>
-          <li className="mx-2 text-2xl">fuga</li>
-          <li className="mx-2 text-2xl">piyo</li>
+        <h1>Side Menu</h1>
+        <ul className="flex flex-col">
+          <li className="">hoge</li>
+          <li className="">fuga</li>
+          <li className="">piyo</li>
         </ul>
       </div>
     </header>

@@ -2,27 +2,17 @@ import { useEffect, Suspense } from 'react'
 import { useRecoilValue, useSetRecoilState } from 'recoil'
 import { isSignInAtom } from '../recoil'
 import { useMutation } from '@tanstack/react-query'
-import { fetchSigninPost, fetchSignoutPost, fetchSigninGet } from '../queries'
-import { User } from '../types'
-import SignIn from './SignIn'
+import { fetchSignoutPost, fetchSigninGet } from '../queries'
 import SignOut from './SignOut'
 import Sample from './Sample'
+import { useNavigate } from 'react-router-dom'
 
 const Main = () => {
-  const signinMutation = useMutation((user: User) => fetchSigninPost(user))
+  const navigate = useNavigate()
   const signoutMutation = useMutation((bool: boolean) => fetchSignoutPost())
 
   const isSignIn = useRecoilValue(isSignInAtom)
   const setIsSignIn = useSetRecoilState(isSignInAtom)
-
-  const handleClickSignin = (user: User) => {
-    signinMutation.mutate(user, {
-      onSuccess: async (res: any) => {
-        const json = await res.json()
-        if (json.isSuccess) setIsSignIn(true)
-      },
-    })
-  }
 
   const handleClickSignout = () =>
     // TODO: mutateの引数（不要なので指定しない方法を探す）
@@ -33,6 +23,11 @@ const Main = () => {
       },
     })
 
+  useEffect(() => {
+    if (!isSignIn) {
+      navigate('/signin')
+    }
+  }, [])
   useEffect(() => {
     ;(async () => {
       const json = await fetchSigninGet()
@@ -46,14 +41,15 @@ const Main = () => {
   return (
     <Suspense fallback={<div>loading...</div>}>
       <div className="flex justify-center items-center w-screen h-[100vh]">
-        {isSignIn ? (
-          <div>
-            <Sample />
-            <SignOut handleClickSignout={handleClickSignout} />
-          </div>
-        ) : (
-          <SignIn handleClickSignin={handleClickSignin} />
-        )}
+        {
+          isSignIn ? (
+            <div>
+              <Sample />
+              <SignOut handleClickSignout={handleClickSignout} />
+            </div>
+          ) : null
+          // <SignIn handleClickSignin={handleClickSignin} />
+        }
       </div>
     </Suspense>
   )
