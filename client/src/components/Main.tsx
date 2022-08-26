@@ -40,7 +40,7 @@ const Main = () => {
 
   return (
     <Suspense fallback={<div>loading...</div>}>
-      <div className="flex flex-col justify-center items-center w-screen h-[100vh]">
+      <div className="flex flex-col justify-center items-center w-screen">
         <Sample />
         <SignOut handleClickSignout={handleClickSignout} />
       </div>

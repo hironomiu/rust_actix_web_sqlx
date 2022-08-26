@@ -22,7 +22,9 @@ type Schema = z.infer<typeof schema>
 const SignIn = () => {
   const navigate = useNavigate()
   const isSignIn = useRecoilValue(isSignInAtom)
+  const setIsSignIn = useSetRecoilState(isSignInAtom)
   const signinMutation = useMutation((user: User) => fetchSigninPost(user))
+
   const {
     register,
     handleSubmit,
@@ -31,8 +33,6 @@ const SignIn = () => {
     resolver: zodResolver(schema),
     mode: 'onChange',
   })
-
-  const setIsSignIn = useSetRecoilState(isSignInAtom)
 
   const handleClickSignin = (user: User) => {
     signinMutation.mutate(user, {
@@ -50,35 +50,49 @@ const SignIn = () => {
   }, [isSignIn, navigate])
 
   return (
-    <div>
+    <div className="flex h-[40vh] justify-center items-center md:flex-row flex-col">
       <form
         onSubmit={handleSubmit((user: User) => {
           console.log(user)
           handleClickSignin(user)
         })}
-        className="my-2 sm:flex"
+        className="my-2 sm:flex flex md:flex-row flex-col md:items-start items-center"
       >
         <div>
           <input
             {...register('email')}
-            className=" border-2 h-12 mx-2 px-2 rounded"
+            className=" border-2 h-12 mx-2 md:my-0 my-2 px-2 rounded"
+            placeholder="Email"
           />
-          {errors.email?.message && <p>{errors.email?.message}</p>}
+          <div className="h-8">
+            {errors.email?.message && (
+              <p className="mx-2 text-red-500 font-bold text-md">
+                {errors.email?.message}
+              </p>
+            )}
+          </div>
         </div>
         <div>
           <input
             type="password"
             {...register('password')}
-            className=" border-2 h-12 mx-2 px-2 rounded"
+            className=" border-2 h-12 mx-2 md:my-0 my-2 px-2 rounded"
+            placeholder="Password"
           />
-          {errors.password?.message && <p>{errors.password?.message}</p>}
+          <div className="h-8">
+            {errors.password?.message && (
+              <p className="mx-2 text-red-500 font-bold text-md">
+                {errors.password?.message}
+              </p>
+            )}
+          </div>
         </div>
 
         <input
           type="submit"
           value="SignIn"
           disabled={!isValid}
-          className="h-12 w-32 bg-green-500 rounded-md text-white font-bold mx-2 hover:cursor-pointer disabled:bg-gray-500"
+          className="h-12 w-48 bg-green-500 rounded-md text-white font-bold mx-2 md:my-0 my-2 hover:cursor-pointer disabled:bg-gray-500"
         />
       </form>
     </div>
