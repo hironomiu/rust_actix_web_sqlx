@@ -27,7 +27,7 @@ const Main = () => {
     if (!isSignIn) {
       navigate('/signin')
     }
-  }, [])
+  }, [isSignIn, navigate])
   useEffect(() => {
     ;(async () => {
       const json = await fetchSigninGet()
@@ -40,16 +40,9 @@ const Main = () => {
 
   return (
     <Suspense fallback={<div>loading...</div>}>
-      <div className="flex justify-center items-center w-screen h-[100vh]">
-        {
-          isSignIn ? (
-            <div>
-              <Sample />
-              <SignOut handleClickSignout={handleClickSignout} />
-            </div>
-          ) : null
-          // <SignIn handleClickSignin={handleClickSignin} />
-        }
+      <div className="flex flex-col justify-center items-center w-screen h-[100vh]">
+        <Sample />
+        <SignOut handleClickSignout={handleClickSignout} />
       </div>
     </Suspense>
   )

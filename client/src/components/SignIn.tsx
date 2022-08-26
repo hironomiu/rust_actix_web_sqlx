@@ -26,9 +26,10 @@ const SignIn = () => {
   const {
     register,
     handleSubmit,
-    formState: { errors },
+    formState: { errors, isValid },
   } = useForm<Schema>({
     resolver: zodResolver(schema),
+    mode: 'onChange',
   })
 
   const setIsSignIn = useSetRecoilState(isSignInAtom)
@@ -76,7 +77,8 @@ const SignIn = () => {
         <input
           type="submit"
           value="SignIn"
-          className="h-12 w-32 bg-green-500 rounded-md text-white font-bold mx-2"
+          disabled={!isValid}
+          className="h-12 w-32 bg-green-500 rounded-md text-white font-bold mx-2 hover:cursor-pointer disabled:bg-gray-500"
         />
       </form>
     </div>
