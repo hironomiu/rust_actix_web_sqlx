@@ -1,11 +1,15 @@
 import { useState } from 'react'
 import { AiOutlineMenu, AiOutlineClose } from 'react-icons/ai'
-import { useRecoilValue } from 'recoil'
+import { useRecoilValue, useSetRecoilState } from 'recoil'
 import { isSignInAtom } from '../recoil'
-
+import { useMutation } from '@tanstack/react-query'
+import { fetchSignoutPost } from '../queries'
 const Header = () => {
+  const signOutMutation = useMutation((bool: boolean) => fetchSignoutPost())
   const isSignIn = useRecoilValue(isSignInAtom)
+  const setIsSignIn = useSetRecoilState(isSignInAtom)
   const [isMenuOpen, setIsMenuOpen] = useState(false)
+
   const handleClickOpen = () => {
     setIsMenuOpen(true)
   }
@@ -13,6 +17,15 @@ const Header = () => {
     setIsMenuOpen(false)
   }
 
+  const handleClickSignOut = () => {
+    // TODO: mutateの引数（不要なので指定しない方法を探す）
+    signOutMutation.mutate(false, {
+      onSuccess: async (res: any) => {
+        const json = await res.json()
+        if (json.isSuccess) setIsSignIn(false)
+      },
+    })
+  }
   if (!isSignIn)
     return (
       <header className="flex h-16 justify-between items-center">
@@ -28,6 +41,9 @@ const Header = () => {
           <li className="mx-2 text-2xl">hoge</li>
           <li className="mx-2 text-2xl">fuga</li>
           <li className="mx-2 text-2xl">piyo</li>
+          <li className="mx-2 text-2xl">
+            <button onClick={handleClickSignOut}>SignOut</button>
+          </li>
         </ul>
       </nav>
       <div className="md:hidden mr-4">
@@ -49,6 +65,9 @@ const Header = () => {
           <li className="">hoge</li>
           <li className="">fuga</li>
           <li className="">piyo</li>
+          <li className="" onClick={() => setIsMenuOpen(false)}>
+            <button onClick={handleClickSignOut}>SignOut</button>
+          </li>
         </ul>
       </div>
     </header>
