@@ -63,6 +63,7 @@ const SignIn = () => {
             {...register('email')}
             className=" border-2 h-12 mx-2 md:my-0 my-2 px-2 rounded"
             placeholder="Email"
+            data-testid="email"
           />
           <div className="h-8">
             {errors.email?.message && (
@@ -78,6 +79,7 @@ const SignIn = () => {
             {...register('password')}
             className=" border-2 h-12 mx-2 md:my-0 my-2 px-2 rounded"
             placeholder="Password"
+            data-testid="password"
           />
           <div className="h-8">
             {errors.password?.message && (
@@ -92,6 +94,7 @@ const SignIn = () => {
           type="submit"
           value="SignIn"
           disabled={!isValid}
+          data-testid="submit-button"
           className="h-12 w-48 bg-green-500 rounded-md text-white font-bold mx-2 md:my-0 my-2 hover:cursor-pointer disabled:bg-gray-500"
         />
       </form>

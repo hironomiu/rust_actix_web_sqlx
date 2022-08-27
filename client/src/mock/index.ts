@@ -20,6 +20,9 @@ export const handlers = [
     )
   }),
   rest.get('http://localhost:8686/api/v1/sample', (req, res, ctx) => {
-    return res(ctx.status(200), ctx.json([{ title: 'hoge', body: 'fuga' }]))
+    return res(
+      ctx.status(200),
+      ctx.json([{ id: 1, title: 'hoge', body: 'fuga' }])
+    )
   }),
 ]
