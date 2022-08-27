@@ -2,6 +2,10 @@ import { render, screen } from '@testing-library/react'
 import Header from '../components/Header'
 import { RecoilRoot } from 'recoil'
 import { QueryClientProvider, QueryClient } from '@tanstack/react-query'
+import { setupServer } from 'msw/node'
+import { handlers } from '../mock'
+
+const server = setupServer(...handlers)
 
 const client = new QueryClient({
   defaultOptions: {
@@ -13,8 +17,12 @@ const client = new QueryClient({
   },
 })
 
+beforeAll(() => {
+  server.listen()
+})
+
 describe('Header', () => {
-  it('test', () => {
+  it('test', async () => {
     render(
       <QueryClientProvider client={client}>
         <RecoilRoot>
@@ -23,5 +31,6 @@ describe('Header', () => {
       </QueryClientProvider>
     )
     expect(screen.getByText('Header')).toBeInTheDocument()
+    expect(await screen.findByText('Header')).toBeInTheDocument()
   })
 })

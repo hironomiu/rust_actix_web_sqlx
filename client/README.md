@@ -53,3 +53,9 @@ npm install zod
 npm install react-icons
 npm install --save-dev @types/react-icons
 ```
+
+## MSW
+
+```
+npm install --save-dev msw
+```
