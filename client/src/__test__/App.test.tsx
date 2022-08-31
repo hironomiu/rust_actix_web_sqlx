@@ -29,7 +29,9 @@ describe('App', () => {
     // expect(screen.getByTestId('email')).toHaveValue('')
     // userEvent.type(screen.getByTestId('email'), 'hanako@example.com')
     // expect(await screen.findByTestId('email')).toHaveValue('hanako@example.com')
-    userEvent.type(screen.getByTestId('password'), 'password')
+    waitFor(() => {
+      userEvent.type(screen.getByTestId('password'), 'password')
+    })
     userEvent.click(screen.getByTestId('submit-button'))
     // expect(screen.queryByTestId('submit-button')).toHaveAttribute(
     //   'disabled',

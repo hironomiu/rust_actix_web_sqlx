@@ -56,17 +56,19 @@ const Header = () => {
       <div
         className={
           isMenuOpen
-            ? 'md:hidden fixed top-0 left-0 h-full w-[60%] bg-white ease-in-out duration-500 pl-4'
-            : 'fixed left-[-150px] top-0 h-full ease-in-out duration-1000'
+            ? 'md:hidden fixed top-0 left-0 h-full w-[60%] bg-white ease-in-out duration-500 pl-4 py-4'
+            : 'fixed left-[-70%] top-0 h-full w-[60%] ease-in-out duration-1000 bg-white'
         }
       >
-        <h1>Side Menu</h1>
+        <h1 className="text-3xl">Side Menu</h1>
         <ul className="flex flex-col">
-          <li className="">hoge</li>
-          <li className="">fuga</li>
-          <li className="">piyo</li>
-          <li className="" onClick={() => setIsMenuOpen(false)}>
-            <button onClick={handleClickSignOut}>SignOut</button>
+          <li className="py-2">hoge</li>
+          <li className="py-2">fuga</li>
+          <li className="py-2">piyo</li>
+          <li className="py-2" onClick={() => setIsMenuOpen(false)}>
+            <button className="block" onClick={handleClickSignOut}>
+              SignOut
+            </button>
           </li>
         </ul>
       </div>
